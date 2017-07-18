@@ -1,9 +1,9 @@
 #include <stdint.h>
 
-#define C 4
-#define H 5
-#define N 6
-#define Z 7
+#define C_FLAG 0x10
+#define H_FLAG 0x20
+#define N_FLAG 0x40
+#define Z_FLAG 0x80
 
 typedef struct registers {
     uint8_t a, f;

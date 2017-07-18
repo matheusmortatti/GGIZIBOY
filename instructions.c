@@ -160,8 +160,111 @@ void LD_nn_a(uint16_t operand) { writeByte(operand, registers.a); }
 // 0xF2
 void LD_a_c_offset(uint16_t operand) { registers.a = readByte(0xFF00 + registers.c); }
 
-// LD A,(C)
+// LD (C),A
 // 0xE2
 void LD_c_offset_a(uint16_t operand) { writeByte(0xFF00 + registers.c, registers.a); }
 
+// LDD A,(HL)
+// 0x3A
+void LDD_a_hl(uint16_t operand) { registers.a = readByte(*(uint16_t *)&registers.h); (*(uint16_t *)&registers.h)--; }
 
+// LDD (HL),A
+// 0x32
+void LDD_hl_a(uint16_t operand) { writeByte(*(uint16_t *)&registers.h, registers.a); (*(uint16_t *)&registers.h)--; }
+
+// LDI A,(HL)
+// 0x2A
+void LDI_a_hl(uint16_t operand) { registers.a = readByte(*(uint16_t *)&registers.h); (*(uint16_t *)&registers.h)++; }
+
+// LDI (HL),A
+// 0x22
+void LDI_hl_a(uint16_t operand) { writeByte(*(uint16_t *)&registers.h, registers.a); (*(uint16_t *)&registers.h)++; }
+
+// LDH (n),A
+// 0xE0
+void LDH_n_a(uint16_t operand) { writeByte(0xFF00 + operand, registers.a); }
+
+// LDH A,(n)
+// 0xF0
+void LDH_a_n(uint16_t operand) { registers.a = readByte(0xFF00 + operand); }
+
+// 16-bit Loads
+
+// LD BC,nn
+// 0x01
+void LD_bc_nn(uint16_t operand) { *(uint16_t *)&registers.b = operand; }
+
+// LD DE,nn
+// 0x11
+void LD_de_nn(uint16_t operand) { *(uint16_t *)&registers.d = operand; }
+
+// LD HL,nn
+// 0x21
+void LD_hl_nn(uint16_t operand) { *(uint16_t *)&registers.h = operand; }
+
+// LD SP,nn
+// 0x31
+void LD_sp_nn(uint16_t operand) { registers.sp = operand; }
+
+// LD SP,hl
+// 0xF9
+void LD_sp_hl(uint16_t operand) { registers.sp = *(uint16_t *)&registers.h; }
+
+// LDHL SP,n
+// 0xF8
+void LDHL_sp_n(uint16_t operand) { 
+    uint32_t value;
+
+    value = registers.sp + (int8_t)operand;
+    *(uint16_t *)&registers.h = (uint16_t)value;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.sp & 0x0F) + (operand & 0x0F)) & 0xF0) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (value & 0xFFFF0000) 
+        registers.flag |= C_FLAG;
+}
+
+// LD (nn),SP
+// 0x08
+void LD_sp_n(uint16_t operand) { writeWord(operand ,registers.sp); }
+
+// PUSH AF
+// 0xF5
+void PUSH_af(uint16_t operand) { registers.sp -= 2; writeWord(registers.sp, *(uint16_t *)&registers.a); }
+
+// PUSH BC
+// 0xC5
+void PUSH_bc(uint16_t operand) { registers.sp -= 2; writeWord(registers.sp, *(uint16_t *)&registers.b); }
+
+// PUSH DE
+// 0xD5
+void PUSH_de(uint16_t operand) { registers.sp -= 2; writeWord(registers.sp, *(uint16_t *)&registers.d); }
+
+// PUSH hl
+// 0xE5
+void PUSH_hl(uint16_t operand) { registers.sp -= 2; writeWord(registers.sp, *(uint16_t *)&registers.h); }
+
+// POP AF
+// 0xF1
+void POP_af(uint16_t operand) { *(uint16_t *)&registers.a = readWord(registers.sp); registers.sp -= 2; }
+
+// POP BC
+// 0xC1
+void POP_bc(uint16_t operand) { *(uint16_t *)&registers.b = readWord(registers.sp); registers.sp -= 2; }
+
+// POP DE
+// 0xD1
+void POP_de(uint16_t operand) { *(uint16_t *)&registers.d = readWord(registers.sp); registers.sp -= 2; }
+
+// POP hl
+// 0xE1
+void POP_hl(uint16_t operand) { *(uint16_t *)&registers.h = readWord(registers.sp); registers.sp -= 2; }
+
+
+// 8-bit ALU
