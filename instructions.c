@@ -268,3 +268,2019 @@ void POP_hl(uint16_t operand) { *(uint16_t *)&registers.h = readWord(registers.s
 
 
 // 8-bit ALU
+
+// ADD A,n
+
+// ADD A,A
+// 0x87
+void ADD_a_a(uint16_t operand) {
+    uint32_t sum;
+
+    sum = registers.a + registers.a;
+    registers.a = (uint8_t)(sum & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.a & 0x0F) + (registers.a & 0x0F)) & 0x10) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x100)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sum & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// ADD A,B
+// 0x80
+void ADD_a_b(uint16_t operand) {
+    uint32_t sum;
+
+    sum = registers.a + registers.b;
+    registers.a = (uint8_t)(sum & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.a & 0x0F) + (registers.b & 0x0F)) & 0x10) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x100)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sum & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// ADD A,C
+// 0x81
+void ADD_a_c(uint16_t operand) {
+    uint32_t sum;
+
+    sum = registers.a + registers.c;
+    registers.a = (uint8_t)(sum & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.a & 0x0F) + (registers.c & 0x0F)) & 0x10) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x100)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sum & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// ADD A,D
+// 0x82
+void ADD_a_d(uint16_t operand) {
+    uint32_t sum;
+
+    sum = registers.a + registers.d;
+    registers.a = (uint8_t)(sum & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.a & 0x0F) + (registers.d & 0x0F)) & 0x10) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x100)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sum & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// ADD A,E
+// 0x83
+void ADD_a_e(uint16_t operand) {
+    uint32_t sum;
+
+    sum = registers.a + registers.e;
+    registers.a = (uint8_t)(sum & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.a & 0x0F) + (registers.e & 0x0F)) & 0x10) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x100)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sum & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// ADD A,H
+// 0x84
+void ADD_a_h(uint16_t operand) {
+    uint32_t sum;
+
+    sum = registers.a + registers.h;
+    registers.a = (uint8_t)(sum & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.a & 0x0F) + (registers.h & 0x0F)) & 0x10) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x100)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sum & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// ADD A,L
+// 0x85
+void ADD_a_l(uint16_t operand) {
+    uint32_t sum;
+
+    sum = registers.a + registers.l;
+    registers.a = (uint8_t)(sum & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.a & 0x0F) + (registers.l & 0x0F)) & 0x10)
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x100)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sum & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// ADD A,(HL)
+// 0x86
+void ADD_a_hl(uint16_t operand) {
+    uint32_t sum;
+    uint8_t hl = readByte(*(uint16_t *)&registers.h);
+
+    sum = registers.a + hl;
+    registers.a = (uint8_t)(sum & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.a & 0x0F) + (hl & 0x0F)) & 0x10)
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x100)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sum & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// ADD A,#
+// 0xC6
+void ADD_a_imm(uint16_t operand) {
+    uint32_t sum;
+
+    sum = registers.a + (uint8_t)operand;
+    registers.a = (uint8_t)(sum & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.a & 0x0F) + ((uint8_t)operand & 0x0F)) & 0x10)
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x100)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sum & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// ADC A,n
+
+// ADC A,A
+// 0x8F
+void ADC_a_a(uint16_t operand) {
+    uint32_t sum;
+
+    sum = registers.a + registers.a + ((registers.flag & C_FLAG) >> C_FLAG_POS);
+    registers.a = (uint8_t)(sum & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.a & 0x0F) + (registers.a & 0x0F)) & 0x10) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x100)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sum & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// ADC A,B
+// 0x88
+void ADC_a_b(uint16_t operand) {
+    uint32_t sum;
+
+    sum = registers.a + registers.b + ((registers.flag & C_FLAG) >> C_FLAG_POS);
+    registers.a = (uint8_t)(sum & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.a & 0x0F) + (registers.b & 0x0F)) & 0x10) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x100)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sum & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// ADC A,C
+// 0x89
+void ADC_a_c(uint16_t operand) {
+    uint32_t sum;
+
+    sum = registers.a + registers.c + ((registers.flag & C_FLAG) >> C_FLAG_POS);
+    registers.a = (uint8_t)(sum & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.a & 0x0F) + (registers.c & 0x0F)) & 0x10) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x100)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sum & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// ADC A,D
+// 0x8A
+void ADC_a_d(uint16_t operand) {
+    uint32_t sum;
+
+    sum = registers.a + registers.d + ((registers.flag & C_FLAG) >> C_FLAG_POS);
+    registers.a = (uint8_t)(sum & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.a & 0x0F) + (registers.d & 0x0F)) & 0x10) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x100)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sum & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// ADC A,E
+// 0x8B
+void ADC_a_e(uint16_t operand) {
+    uint32_t sum;
+
+    sum = registers.a + registers.e + ((registers.flag & C_FLAG) >> C_FLAG_POS);
+    registers.a = (uint8_t)(sum & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.a & 0x0F) + (registers.e & 0x0F)) & 0x10) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x100)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sum & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// ADC A,H
+// 0x8C
+void ADC_a_h(uint16_t operand) {
+    uint32_t sum;
+
+    sum = registers.a + registers.h + ((registers.flag & C_FLAG) >> C_FLAG_POS);
+    registers.a = (uint8_t)(sum & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.a & 0x0F) + (registers.h & 0x0F)) & 0x10) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x100)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sum & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// ADC A,L
+// 0x8D
+void ADC_a_l(uint16_t operand) {
+    uint32_t sum;
+
+    sum = registers.a + registers.l + ((registers.flag & C_FLAG) >> C_FLAG_POS);
+    registers.a = (uint8_t)(sum & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.a & 0x0F) + (registers.l & 0x0F)) & 0x10)
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x100)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sum & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// ADC A,(HL)
+// 0x8E
+void ADC_a_hl(uint16_t operand) {
+    uint32_t sum;
+    uint8_t hl = readByte(*(uint16_t *)&registers.h);
+
+    sum = registers.a + hl + ((registers.flag & C_FLAG) >> C_FLAG_POS);
+    registers.a = (uint8_t)(sum & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.a & 0x0F) + (hl & 0x0F)) & 0x10)
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x100)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sum & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// ADC A,#
+// 0xCE
+void ADC_a_imm(uint16_t operand) {
+    uint32_t sum;
+
+    sum = registers.a + (uint8_t)operand + ((registers.flag & C_FLAG) >> C_FLAG_POS);
+    registers.a = (uint8_t)(sum & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.a & 0x0F) + ((uint8_t)operand & 0x0F)) & 0x10)
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x100)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sum & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// SUB A,A
+// 0x97
+void SUB_a_a(uint16_t operand) {
+    registers.a = 0;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set flag Z
+    registers.flag |= Z_FLAG;
+
+    // Set flag H
+    registers.flag |= H_FLAG;
+
+    // Set flag C
+    registers.flag |= C_FLAG;
+}
+
+// SUB A,B
+// 0x90
+void SUB_a_b(uint16_t operand) {
+    uint32_t sub;
+
+    sub = registers.a - registers.b;
+    registers.a = (uint8_t)(sub & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (registers.b & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= registers.b)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// SUB A,C
+// 0x91
+void SUB_a_c(uint16_t operand) {
+    uint32_t sub;
+
+    sub = registers.a - registers.c;
+    registers.a = (uint8_t)(sub & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (registers.c & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= registers.c)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// SUB A,D
+// 0x92
+void SUB_a_d(uint16_t operand) {
+    uint32_t sub;
+
+    sub = registers.a - registers.d;
+    registers.a = (uint8_t)(sub & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (registers.d & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= registers.d)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// SUB A,E
+// 0x93
+void SUB_a_e(uint16_t operand) {
+    uint32_t sub;
+
+    sub = registers.a - registers.e;
+    registers.a = (uint8_t)(sub & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (registers.e & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= registers.e)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// SUB A,H
+// 0x94
+void SUB_a_h(uint16_t operand) {
+    uint32_t sub;
+
+    sub = registers.a - registers.h;
+    registers.a = (uint8_t)(sub & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (registers.h & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= registers.h)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// SUB A,L
+// 0x95
+void SUB_a_l(uint16_t operand) {
+    uint32_t sub;
+
+    sub = registers.a - registers.l;
+    registers.a = (uint8_t)(sub & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (registers.l & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= registers.l)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// SUB A,(HL)
+// 0x96
+void SUB_a_hl(uint16_t operand) {
+    uint32_t sub;
+    uint8_t hl = readByte(*(uint16_t *)&registers.h);
+
+    sub = registers.a - hl;
+    registers.a = (uint8_t)(sub & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (hl & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= hl)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// SUB A,#
+// 0xD6
+void SUB_a_imm(uint16_t operand) {
+    uint32_t sub;
+
+    sub = registers.a - (uint8_t)(operand & 0xFF);
+    registers.a = (uint8_t)(sub & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= ((uint8_t)(operand & 0xFF) & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= (uint8_t)(operand & 0xFF))
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// SBC A,A
+// 0x9F
+void SBC_a_a(uint16_t operand) {
+    uint32_t sub;
+    uint8_t aux = registers.a + ((registers.flag & C_FLAG) >> C_FLAG_POS);
+
+    sub = registers.a - aux;
+    registers.a = (uint8_t)(sub & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (aux & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= aux)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// SBC A,B
+// 0x98
+void SBC_a_b(uint16_t operand) {
+    uint32_t sub;
+    uint8_t aux = registers.b + ((registers.flag & C_FLAG) >> C_FLAG_POS);
+
+    sub = registers.a - aux;
+    registers.a = (uint8_t)(sub & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (aux & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= aux)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// SBC A,C
+// 0x99
+void SBC_a_c(uint16_t operand) {
+    uint32_t sub;
+    uint8_t aux = registers.c + ((registers.flag & C_FLAG) >> C_FLAG_POS);
+
+    sub = registers.a - aux;
+    registers.a = (uint8_t)(sub & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (aux & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= aux)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// SBC A,D
+// 0x9A
+void SBC_a_d(uint16_t operand) {
+    uint32_t sub;
+    uint8_t aux = registers.d + ((registers.flag & C_FLAG) >> C_FLAG_POS);
+
+    sub = registers.a - aux;
+    registers.a = (uint8_t)(sub & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (aux & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= aux)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// SBC A,E
+// 0x9B
+void SBC_a_e(uint16_t operand) {
+    uint32_t sub;
+    uint8_t aux = registers.e + ((registers.flag & C_FLAG) >> C_FLAG_POS);
+
+    sub = registers.a - aux;
+    registers.a = (uint8_t)(sub & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (aux & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= aux)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// SBC A,H
+// 0x9C
+void SBC_a_h(uint16_t operand) {
+    uint32_t sub;
+    uint8_t aux = registers.h + ((registers.flag & C_FLAG) >> C_FLAG_POS);
+
+    sub = registers.a - aux;
+    registers.a = (uint8_t)(sub & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (aux & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= aux)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// SBC A,L
+// 0x9D
+void SBC_a_l(uint16_t operand) {
+    uint32_t sub;
+    uint8_t aux = registers.l + ((registers.flag & C_FLAG) >> C_FLAG_POS);
+
+    sub = registers.a - aux;
+    registers.a = (uint8_t)(sub & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (aux & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= aux)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// SUB A,(HL)
+// 0x9E
+void SBC_a_hl(uint16_t operand) {
+    uint32_t sub;
+    uint8_t hl = readByte(*(uint16_t *)&registers.h) + ((registers.flag & C_FLAG) >> C_FLAG_POS);
+
+    sub = registers.a - hl;
+    registers.a = (uint8_t)(sub & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (hl & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= hl)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// AND A,A
+// 0xA7
+void AND_a_a(uint16_t operand) {
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag H
+    registers.flag |= H_FLAG;
+
+    // Set or Reset flag Z
+    if (registers.a == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// AND A,B
+// 0xA0
+void AND_a_b(uint16_t operand) {
+    uint8_t and;
+
+    and = registers.a & registers.b;
+    registers.a = and;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag H
+    registers.flag |= H_FLAG;
+
+    // Set or Reset flag Z
+    if (and == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// AND A,C
+// 0xA1
+void AND_a_c(uint16_t operand) {
+    uint8_t and;
+
+    and = registers.a & registers.c;
+    registers.a = and;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag H
+    registers.flag |= H_FLAG;
+
+    // Set or Reset flag Z
+    if (and == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// AND A,D
+// 0xA2
+void AND_a_d(uint16_t operand) {
+    uint8_t and;
+
+    and = registers.a & registers.d;
+    registers.a = and;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag H
+    registers.flag |= H_FLAG;
+
+    // Set or Reset flag Z
+    if (and == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// AND A,E
+// 0xA3
+void AND_a_e(uint16_t operand) {
+    uint8_t and;
+
+    and = registers.a & registers.e;
+    registers.a = and;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag H
+    registers.flag |= H_FLAG;
+
+    // Set or Reset flag Z
+    if (and == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// AND A,H
+// 0xA4
+void AND_a_h(uint16_t operand) {
+    uint8_t and;
+
+    and = registers.a & registers.h;
+    registers.a = and;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag H
+    registers.flag |= H_FLAG;
+
+    // Set or Reset flag Z
+    if (and == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// AND A,L
+// 0xA5
+void AND_a_l(uint16_t operand) {
+    uint8_t and;
+
+    and = registers.a & registers.l;
+    registers.a = and;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag H
+    registers.flag |= H_FLAG;
+
+    // Set or Reset flag Z
+    if (and == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// AND A,(hl)
+// 0xA6
+void AND_a_hl(uint16_t operand) {
+    uint8_t and;
+    uint8_t hl = readByte(*(uint8_t *)&registers.h);
+
+    and = registers.a & hl;
+    registers.a = and;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag H
+    registers.flag |= H_FLAG;
+
+    // Set or Reset flag Z
+    if (and == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// AND A,#
+// 0xE6
+void AND_a_imm(uint16_t operand) {
+    uint8_t and;
+
+    and = registers.a & (uint8_t)operand;
+    registers.a = and;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag H
+    registers.flag |= H_FLAG;
+
+    // Set or Reset flag Z
+    if (and == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// OR A,A
+// 0xB7
+void OR_a_a(uint16_t operand) {
+    uint8_t or;
+
+    or = registers.a | registers.a;
+    registers.a = or;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag Z
+    if (or == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// OR A,B
+// 0xB0
+void OR_a_b(uint16_t operand) {
+    uint8_t or;
+
+    or = registers.a | registers.b;
+    registers.a = or;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag Z
+    if (or == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// OR A,C
+// 0xB1
+void OR_a_c(uint16_t operand) {
+    uint8_t or;
+
+    or = registers.a | registers.c;
+    registers.a = or;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag Z
+    if (or == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// OR A,D
+// 0xB2
+void OR_a_d(uint16_t operand) {
+    uint8_t or;
+
+    or = registers.a | registers.d;
+    registers.a = or;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag Z
+    if (or == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// OR A,E
+// 0xB3
+void OR_a_e(uint16_t operand) {
+    uint8_t or;
+
+    or = registers.a | registers.e;
+    registers.a = or;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag Z
+    if (or == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// OR A,H
+// 0xB4
+void OR_a_h(uint16_t operand) {
+    uint8_t or;
+
+    or = registers.a | registers.h;
+    registers.a = or;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag Z
+    if (or == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// OR A,L
+// 0xB5
+void OR_a_l(uint16_t operand) {
+    uint8_t or;
+
+    or = registers.a | registers.l;
+    registers.a = or;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag Z
+    if (or == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// OR A,(HL)
+// 0xB6
+void OR_a_hl(uint16_t operand) {
+    uint8_t or = readByte(*(uint8_t *)&registers.h);
+
+    or |= registers.a;
+    registers.a = or;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag Z
+    if (or == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// OR A,#
+// 0xF6
+void OR_a_imm(uint16_t operand) {
+    uint8_t or;
+
+    or = registers.a | (uint8_t)operand;
+    registers.a = or;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag Z
+    if (or == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// XOR A,A
+// 0xAF
+void XOR_a_a(uint16_t operand) {
+    registers.a = 0;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag Z
+    registers.flag |= Z_FLAG;
+}
+
+// XOR A,B
+// 0xA8
+void XOR_a_b(uint16_t operand) {
+    uint8_t xor;
+
+    xor = registers.a ^ registers.b;
+    registers.a = xor;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag Z
+    if (xor == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// XOR A,C
+// 0xA9
+void XOR_a_c(uint16_t operand) {
+    uint8_t xor;
+
+    xor = registers.a ^ registers.c;
+    registers.a = xor;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag Z
+    if (xor == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// XOR A,D
+// 0xAA
+void XOR_a_d(uint16_t operand) {
+    uint8_t xor;
+
+    xor = registers.a ^ registers.d;
+    registers.a = xor;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag Z
+    if (xor == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// XOR A,E
+// 0xAB
+void XOR_a_e(uint16_t operand) {
+    uint8_t xor;
+
+    xor = registers.a ^ registers.e;
+    registers.a = xor;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag Z
+    if (xor == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// XOR A,H
+// 0xAC
+void XOR_a_h(uint16_t operand) {
+    uint8_t xor;
+
+    xor = registers.a ^ registers.h;
+    registers.a = xor;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag Z
+    if (xor == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// XOR A,L
+// 0xAD
+void XOR_a_l(uint16_t operand) {
+    uint8_t xor;
+
+    xor = registers.a ^ registers.l;
+    registers.a = xor;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag Z
+    if (xor == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// XOR A,(HL)
+// 0xAE
+void XOR_a_hl(uint16_t operand) {
+    uint8_t xor = readByte(*(uint8_t *)&registers.h);
+
+    xor ^= registers.a;
+    registers.a = xor;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag Z
+    if (xor == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// XOR A,#
+// 0xEE
+void XOR_a_imm(uint16_t operand) {
+    uint8_t xor;
+
+    xor = registers.a ^ (uint8_t)operand;
+    registers.a = xor;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag Z
+    if (xor == 0)
+        registers.flag |= Z_FLAG;
+}
+
+
+// CP A,A
+// 0xBF
+void CP_a_a(uint16_t operand) {
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set flag Z
+    registers.flag |= Z_FLAG;
+
+    // Set flag C
+    registers.flag |= C_FLAG;
+
+    // Set flag H
+    registers.flag |= H_FLAG;
+}
+
+// CP A,B
+// 0xB8
+void CP_a_b(uint16_t operand) {
+    uint32_t sub;
+
+    sub = registers.a - registers.b;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (registers.b & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= registers.b)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// CP A,C
+// 0xB9
+void CP_a_c(uint16_t operand) {
+    uint32_t sub;
+
+    sub = registers.a - registers.c;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (registers.c & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= registers.c)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// CP A,D
+// 0xBA
+void CP_a_d(uint16_t operand) {
+    uint32_t sub;
+
+    sub = registers.a - registers.d;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (registers.d & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= registers.d)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// CP A,E
+// 0xBB
+void CP_a_e(uint16_t operand) {
+    uint32_t sub;
+
+    sub = registers.a - registers.e;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (registers.e & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= registers.e)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// CP A,H
+// 0xBC
+void CP_a_h(uint16_t operand) {
+    uint32_t sub;
+
+    sub = registers.a - registers.h;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (registers.h & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= registers.h)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// CP A,L
+// 0xBD
+void CP_a_l(uint16_t operand) {
+    uint32_t sub;
+
+    sub = registers.a - registers.l;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (registers.l & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= registers.l)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// CP A,(HL)
+// 0xBE
+void CP_a_hl(uint16_t operand) {
+    uint32_t sub;
+    uint8_t hl = readByte(*(uint16_t *)&registers.h);
+
+    sub = registers.a - hl;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (hl & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= hl)
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// CP A,#
+// 0xFE
+void CP_a_imm(uint16_t operand) {
+    uint32_t sub;
+
+    sub = registers.a - (uint8_t)(operand & 0xFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= ((uint8_t)(operand & 0xFF) & 0x0F))
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (registers.a >= (uint8_t)(operand & 0xFF))
+        registers.flag |= C_FLAG;
+
+    // Set or Reset flag Z
+    if ((sub & 0xFF) == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// INC A
+// 0x3C
+void INC_a(uint16_t operand) {
+    registers.a++;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.a & 0x0F) + 0x01) & 0x10) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag Z
+    if (registers.a == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// INC B
+// 0x04
+void INC_b(uint16_t operand) {
+    registers.b++;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.b & 0x0F) + 0x01) & 0x10) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag Z
+    if (registers.b == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// INC C
+// 0x0C
+void INC_c(uint16_t operand) {
+    registers.c++;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.c & 0x0F) + 0x01) & 0x10) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag Z
+    if (registers.c == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// INC D
+// 0x14
+void INC_d(uint16_t operand) {
+    registers.d++;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.d & 0x0F) + 0x01) & 0x10) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag Z
+    if (registers.d == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// INC E
+// 0x1C
+void INC_e(uint16_t operand) {
+    registers.e++;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.e & 0x0F) + 0x01) & 0x10) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag Z
+    if (registers.e == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// INC H
+// 0x24
+void INC_h(uint16_t operand) {
+    registers.h++;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.h & 0x0F) + 0x01) & 0x10) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag Z
+    if (registers.h == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// INC L
+// 0x2C
+void INC_l(uint16_t operand) {
+    registers.l++;
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.l & 0x0F) + 0x01) & 0x10) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag Z
+    if (registers.l == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// INC (HL)
+// 0x34
+void INC_hl_m(uint16_t operand) {
+    uint8_t hl = readByte(*(uint16_t *)&registers.h);
+
+    hl++;
+    writeByte(*(uint16_t *)&registers.h, hl);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (hl & 0x10) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag Z
+    if (hl == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// DEC A
+// 0x3D
+void DEC_a(uint16_t operand) {
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (0x01))
+        registers.flag |= H_FLAG;
+
+    registers.a--;
+
+    // Set or Reset flag Z
+    if (registers.a == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// DEC B
+// 0x05
+void DEC_b(uint16_t operand) {
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.b & 0x0F) >= (0x01))
+        registers.flag |= H_FLAG;
+
+    registers.b--;
+
+    // Set or Reset flag Z
+    if (registers.b == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// DEC C
+// 0x0D
+void DEC_c(uint16_t operand) {
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.c & 0x0F) >= (0x01))
+        registers.flag |= H_FLAG;
+
+    registers.c--;
+
+    // Set or Reset flag Z
+    if (registers.c == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// DEC D
+// 0x15
+void DEC_d(uint16_t operand) {
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.d & 0x0F) >= (0x01))
+        registers.flag |= H_FLAG;
+
+    registers.d--;
+
+    // Set or Reset flag Z
+    if (registers.d == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// DEC E
+// 0x1D
+void DEC_e(uint16_t operand) {
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.e & 0x0F) >= (0x01))
+        registers.flag |= H_FLAG;
+
+    registers.e--;
+
+    // Set or Reset flag Z
+    if (registers.e == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// DEC H
+// 0x25
+void DEC_h(uint16_t operand) {
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.h & 0x0F) >= (0x01))
+        registers.flag |= H_FLAG;
+
+    registers.h--;
+
+    // Set or Reset flag Z
+    if (registers.h == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// DEC L
+// 0x2D
+void DEC_l(uint16_t operand) {
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.l & 0x0F) >= (0x01))
+        registers.flag |= H_FLAG;
+
+    registers.l--;
+
+    // Set or Reset flag Z
+    if (registers.l == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// DEC (hl)
+// 0x35
+void DEC_hl_m(uint16_t operand) {
+    uint8_t hl = readByte(*(uint16_t *)&registers.h);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set flag N
+    registers.flag |= N_FLAG;
+
+    // Set or Reset flag H
+    if ((registers.a & 0x0F) >= (0x01))
+        registers.flag |= H_FLAG;
+
+    hl--;
+    writeByte(*(uint16_t *)&registers.h, hl);
+
+    // Set or Reset flag Z
+    if (registers.a == 0)
+        registers.flag |= Z_FLAG;
+}
+
+// 16-bit ALU
+
+// ADD HL,BC
+// 0x09
+void ADD_hl_bc(uint16_t operand) {
+    uint32_t sum;
+
+    sum = *(uint16_t *)&registers.h + *(uint16_t *)&registers.b;
+    *(uint16_t *)&registers.h = (uint16_t)(sum & 0xFFFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((*(uint16_t *)&registers.h & 0x0FFF) + (*(uint16_t *)&registers.b & 0x0FFF)) & 0x1000) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x10000)
+        registers.flag |= C_FLAG;
+}
+
+// ADD HL,DE
+// 0x19
+void ADD_hl_de(uint16_t operand) {
+    uint32_t sum;
+
+    sum = *(uint16_t *)&registers.h + *(uint16_t *)&registers.d;
+    *(uint16_t *)&registers.h = (uint16_t)(sum & 0xFFFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((*(uint16_t *)&registers.h & 0x0FFF) + (*(uint16_t *)&registers.d & 0x0FFF)) & 0x1000) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x10000)
+        registers.flag |= C_FLAG;
+}
+
+// ADD HL,HL
+// 0x29
+void ADD_hl_hl(uint16_t operand) {
+    uint32_t sum;
+
+    sum = *(uint16_t *)&registers.h + *(uint16_t *)&registers.h;
+    *(uint16_t *)&registers.h = (uint16_t)(sum & 0xFFFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((*(uint16_t *)&registers.h & 0x0FFF) + (*(uint16_t *)&registers.h & 0x0FFF)) & 0x1000) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x10000)
+        registers.flag |= C_FLAG;
+}
+
+// ADD HL,SP
+// 0x19
+void ADD_hl_sp(uint16_t operand) {
+    uint32_t sum;
+
+    sum = *(uint16_t *)&registers.h + registers.sp;
+    *(uint16_t *)&registers.h = (uint16_t)(sum & 0xFFFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((*(uint16_t *)&registers.h & 0x0FFF) + (registers.sp & 0x0FFF)) & 0x1000) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x10000)
+        registers.flag |= C_FLAG;
+}
+
+// ADD SP,#
+// 0xE8
+void ADD_sp_imm(uint16_t operand) {
+    uint32_t sum;
+
+    sum = registers.sp + (int8_t)(operand & 0x00FF);
+    registers.sp = (uint16_t)(sum & 0xFFFF);
+
+    // Reset flags
+    registers.flag = 0;
+
+    // Set or Reset flag H
+    if (((registers.sp & 0x0F) + (operand & 0x0F)) & 0x1000) 
+        registers.flag |= H_FLAG;
+
+    // Set or Reset flag C
+    if (sum & 0x10000)
+        registers.flag |= C_FLAG;
+}
+
+// INC BC
+// 0x03
+void INC_bc(uint16_t operand) { (*(uint16_t *)&registers.b)++; }
+
+// INC DE
+// 0x13
+void INC_de(uint16_t operand) { (*(uint16_t *)&registers.d)++; }
+
+// INC HL
+// 0x23
+void INC_hl(uint16_t operand) { (*(uint16_t *)&registers.h)++; }
+
+// INC SP
+// 0x33
+void INC_sp(uint16_t operand) { (registers.sp)++; }
+
+// DEC BC
+// 0x0B
+void DEC_bc(uint16_t operand) { (*(uint16_t *)&registers.b)--; }
+
+// DEC DE
+// 0x1B
+void DEC_de(uint16_t operand) { (*(uint16_t *)&registers.d)--; }
+
+// DEC HL
+// 0x2B
+void DEC_hl(uint16_t operand) { (*(uint16_t *)&registers.h)--; }
+
+// DEC SP
+// 0x3B
+void DEC_sp(uint16_t operand) { (registers.sp)--; }
